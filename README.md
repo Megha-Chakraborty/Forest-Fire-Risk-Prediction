@@ -1,4 +1,4 @@
-# Algerian Forest Fire Prediction
+# Algerian Forest Fire Risk Prediction
 
 This project implements a complete end-to-end machine learning lifecycle to predict the Fire Weather Index (FWI) using meteorological data from two regions in Algeria. The project covers everything from data cleaning and exploratory data analysis (EDA) to model training, evaluation, and deployment as both a Flask and a Streamlit web application.
 
