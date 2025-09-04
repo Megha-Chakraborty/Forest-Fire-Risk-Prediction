@@ -1,13 +1,12 @@
-##USING FLASK
-
 from flask import Flask, request, render_template
 import numpy as np
 import pickle
+import os
 
 application = Flask(__name__)
 app = application
 
-# import ridge regressor and standard scaler pickle
+# Load ridge regressor and standard scaler pickle
 ridge_model = pickle.load(open('models/ridge.pkl', 'rb'))
 standard_scaler = pickle.load(open('models/scaler.pkl', 'rb'))
 
@@ -32,13 +31,12 @@ def predict_datapoint():
             new_data_scaled = standard_scaler.transform([[Temperature, RH, Ws, Rain, FFMC, DMC, ISI, Classes, Region]])
             result = ridge_model.predict(new_data_scaled)
 
-            # Pass the result and the form data back to the template
             return render_template('home.html', results=result[0], form_data=request.form)
         except Exception as e:
-            # Pass the error and form data back to the template
             return render_template('home.html', error=f"Error: {e}", form_data=request.form)
     else:
         return render_template('home.html')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    port = int(os.environ.get("PORT", 5000))  # ✅ Use Render's PORT
+    app.run(host="0.0.0.0", port=port)
