@@ -109,4 +109,4 @@ Open your browser and navigate to the local URL provided in the terminal (usuall
 - **ML Modeling:** Scikit-learn
 - **Web Framework (Backend):** Flask
 - **Web Framework (Dashboard):** Streamlit
-- **Development Environment:** Jupyter Notebook,
+- **Development Environment:** Jupyter Notebook
