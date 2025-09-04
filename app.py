@@ -4,9 +4,9 @@ import numpy as np
 
 # --- Page Configuration (must be the first Streamlit command) ---
 st.set_page_config(
-    page_title="Forest Fire Prediction",
+    page_title="FWI Prediction | Showcase",
     page_icon="🔥",
-    layout="centered"  # Use a centered layout for a clean, focused look
+    layout="wide"
 )
 
 # --- Model Loading (cached for performance) ---
@@ -24,31 +24,71 @@ def load_models():
 
 scaler, models = load_models()
 
-# --- Custom CSS for a polished, modern look ---
+# --- Custom CSS for a Professional, LinkedIn-Ready Look ---
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
     /* General App Styling */
-    .stApp {
-        background-color: #f0f2f6;
+    html, body, [class*="st-"] {
+        font-family: 'Poppins', sans-serif;
     }
+    .stApp {
+        background-color: #1a1a1a; /* Dark background */
+        color: #e0e0e0;
+    }
+    
     /* Sidebar Styling */
     [data-testid="stSidebar"] {
-        background-color: #ffffff;
-        border-right: 1px solid #e6e6e6;
+        background-color: #262626;
+        border-right: 1px solid #333;
     }
+    [data-testid="stSidebar"] h2, [data-testid="stSidebar"] .st-emotion-cache-1gulkj5 {
+        color: #fafafa;
+    }
+
+    /* Main Title with Gradient */
+    .title-gradient {
+        background: -webkit-linear-gradient(45deg, #ff4b1f, #ff9068);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        font-size: 3rem;
+    }
+
+    /* Main content card styling */
+    [data-testid="stAppViewContainer"] > .main > div:first-child {
+        background-color: #262626;
+        padding: 2rem;
+        border-radius: 15px;
+        border: 1px solid #333;
+    }
+
     /* Button Styling */
     .stButton>button {
         width: 100%;
         border-radius: 8px;
         border: none;
-        padding: 0.75em 1em;
+        padding: 0.8em 1em;
         font-weight: 600;
         color: #ffffff;
-        background-color: #ff4b4b;
-        transition: background-color 0.25s;
+        background-image: linear-gradient(45deg, #ff4b1f 0%, #ff9068 100%);
+        transition: transform 0.2s, box-shadow 0.2s;
     }
     .stButton>button:hover {
-        background-color: #ff3030;
+        transform: scale(1.02);
+        box-shadow: 0 0 15px rgba(255, 118, 77, 0.5);
+    }
+
+    /* Metric Styling */
+    [data-testid="stMetric"] {
+        background-color: #333333;
+        border-radius: 10px;
+        padding: 1rem;
+        border: 1px solid #444;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #a0a0a0;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -78,18 +118,19 @@ with st.sidebar:
     st.markdown("---")
 
     st.subheader("Contextual Information")
-    Classes = st.selectbox("Fire Occurrence", options=["Fire", "Not Fire"])
     Region = st.selectbox("Region", options=["Bejaia", "Sidi Bel-abbes"])
 
-    # Convert categorical inputs to numerical for the model
-    Classes_val = 1 if Classes == "Fire" else 0
+    # Convert Region to numerical for the model
     Region_val = 0 if Region == "Bejaia" else 1
+    
+    # Set a fixed value for 'Classes' to prevent data leakage from the UI
+    Classes_val = 1 # Corresponds to "Fire"
 
-    predict_button = st.button("🔥 Predict Fire Risk")
+    predict_button = st.button("Predict Fire Risk")
 
 # --- Main Page Content ---
-st.title("🔥 Algerian Forest Fire Risk Prediction")
-#st.markdown("Use the sidebar on the left to input data and get a Fire Weather Index (FWI) prediction.")
+st.markdown('<h1 class="title-gradient">Algerian Forest Fire Risk Prediction</h1>', unsafe_allow_html=True)
+# st.markdown("This dashboard predicts the **Fire Weather Index (FWI)**, a key indicator of forest fire danger, using machine learning.")
 
 # --- Prediction Logic and Display ---
 if predict_button:
@@ -119,9 +160,9 @@ if predict_button:
     with col1:
         st.metric(label="Predicted Fire Weather Index (FWI)", value=f"{prediction:.2f}")
     with col2:
-        st.metric(label="Risk Level", value=risk_level)
+        st.metric(label="Calculated Risk Level", value=risk_level)
 
-    st.progress(min(int(prediction), 100), text=f"Risk Level: {risk_level}")
+    st.progress(min(int(prediction), 100))
 
     # Show a clear conclusion message with an appropriate icon
     if risk_level == "Low":
@@ -133,7 +174,7 @@ if predict_button:
     else:
         st.error(f"**Conclusion:** The predicted fire risk is **{risk_level}**. Extreme fire danger. Avoid any activity that could start a fire. 🚨")
 else:
-    st.info("Awaiting input...to 'Predict Fire Risk'.")
+    st.info("Awaiting input...")
 
 # --- Footer ---
 st.markdown("---")
